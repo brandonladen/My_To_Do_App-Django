@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+{% block content %}
+    <!-- Todo List Table -->
+{% if task.count == 0 %}
+<div class="jumbotron text-center mt-5">
+    {% if request.user.first_name or request.user.last_name %}
+        <h1 class="display-4">Welcome, {{ request.user.first_name }} {{ request.user.last_name }}!</h1>
+    {% else %}
+        <h1 class="display-4">Welcome, {{ request.user.username }}!</h1>
+    {% endif %}
+    <p class="lead">Thank you for choosing TodoApp. We're excited to have you on board.</p>
+    <hr class="my-4">
+    {% if not request.user.first_name or not request.user.last_name %}
+        <p>Your profile seems incomplete. Let's update it to enhance your experience.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{% url 'edit_profile' %}" role="button">Update Profile</a>
+        </p>
+    {% else %}
+        <p>Congratulations! Let's start creating your first task list.</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="{% url 'create' %}" role="button">Get Started</a>
+        </p>
+    {% endif %}
+</div>
+
+{% else %}
+    <div class="container mt-5 pt-5">
+        <h1 class="mb-4">Todo List</h1>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Time Created</th>
+                    <th scope="col">Options</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in task %}
+                    <tr>
+                        <th>{{ task.Title }}</th>
+                        <td>{{ task.Description }}</td>
+                        <td>{{ task.Time_created}}</td>
+                        <td>
+                            <a type="button" class="btn btn-primary" href="{% url 'edit' task.id %}">
+                                <i class="fa fa-edit"></i> Edit
+                            </a>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-danger" href="{% url 'delete' task.id %}">
+                                <i class='fa fa-trash-o'></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+{% endblock content %}
